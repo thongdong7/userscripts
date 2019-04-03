@@ -10,6 +10,9 @@
 // @grant        none
 // ==/UserScript==
 
+// ==OpenUserJS==
+// @author       You
+// ==/OpenUserJS==
 (function() {
     'use strict';
 
