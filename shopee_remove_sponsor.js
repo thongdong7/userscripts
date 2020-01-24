@@ -13,6 +13,9 @@
 
     // Your code here...
     setInterval(() => {
-        [...document.getElementsByTagName("div")].filter(item => item.innerText.trim().startsWith('Tài Trợ')).map(item => item.parentNode.parentNode.parentNode.parentNode.parentNode).forEach(item => item.parentNode.removeChild(item))
+        [...document.getElementsByTagName("div")]
+            .filter(item => item.innerText.trim().startsWith('Tài Trợ'))
+            .map(item => item)
+            .forEach(item => item.parentNode.removeChild(item))
     }, 1000);
 })();
