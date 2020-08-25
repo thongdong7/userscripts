@@ -14,7 +14,10 @@ function cleanUp() {
     ads && ads.remove();
 
     // Remove notification
-    document.getElementsByClassName("stardust-popover")[0]?.remove();
+    const thongbao = document.getElementsByClassName("stardust-popover")[0];
+    if (thongbao.innerText === "Thông Báo") {
+        thongbao.remove();
+    }
 }
 
 (function () {
