@@ -8,6 +8,15 @@
 // @grant        none
 // ==/UserScript==
 
+function cleanUp() {
+    // remove popup at homepage
+    const ads = document.getElementsByClassName("shopee-popup shopee-modal__transition-enter-done")[0];
+    ads && ads.remove();
+
+    // Remove notification
+    document.getElementsByClassName("stardust-popover")[0]?.remove();
+}
+
 (function () {
   "use strict";
 
@@ -38,11 +47,5 @@
       console.error("Error:", error);
     });
 
-    // remove popup at homepage
-    const ads = document.getElementsByClassName("shopee-popup shopee-modal__transition-enter-done")[0];
-    ads && ads.remove();
-
-    // Remove notification
-    document.getElementsByClassName("stardust-popover")[0].remove();
-
+    setInterval(cleanUp, 1000);
 })();
