@@ -4,18 +4,34 @@
 // @version      0.1
 // @description  try to take over the world!
 // @author       You
-// @match        https://shopee.vn/*
+// @match        https://shopee.vn/**
 // @grant        none
 // ==/UserScript==
+
+function removeAll(collection) {
+    [...collection].forEach(node => node.remove());
+}
 
 function cleanUp() {
     // remove popup at homepage
     document.getElementsByClassName("shopee-popup__close-btn")[0]?.click()
 
+    // remove game
+    removeAll(document.getElementsByClassName("shopee-floating-icons__wrapper"));
+
     // Remove notification
     const thongbao = document.getElementsByClassName("stardust-popover")[0];
     if (thongbao.innerText === "Thông Báo") {
         thongbao.remove();
+    }
+
+    // Create link
+    if (!document.getElementById("donmua")) {
+        const donMua = document.createElement("li");
+        donMua.setAttribute("id", "donmua");
+        donMua.innerHTML = `<a href="https://shopee.vn/user/purchase/">Đơn mua</a>`;
+
+        document.getElementsByClassName("navbar__links")[0]?.appendChild(donMua);
     }
 }
 
