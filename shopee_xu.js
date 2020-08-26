@@ -10,8 +10,7 @@
 
 function cleanUp() {
     // remove popup at homepage
-    const ads = document.getElementsByClassName("shopee-popup shopee-modal__transition-enter-done")[0];
-    ads && ads.remove();
+    document.getElementsByClassName("shopee-popup__close-btn")[0]?.click()
 
     // Remove notification
     const thongbao = document.getElementsByClassName("stardust-popover")[0];
