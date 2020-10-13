@@ -10,6 +10,8 @@
 // ==/UserScript==
 
 const mainHost = "https://shopee.vn/";
+let xu = "--";
+let showSponsor = false;
 
 function removeAll(collection) {
   [...collection].forEach((node) => node.remove());
@@ -29,8 +31,21 @@ function addDonMua() {
       <a class="${thongbaoACls}" href='https://shopee.vn/user/purchase/'>
         <span class='${thongbaoSpanCls}'>Đơn mua</span>
       </a>
-    </li>`
+    </li>
+    <li id='info' class="navbar__link">
+      <a class="${thongbaoACls}" style="font-weight: bold">
+        <span class='${thongbaoSpanCls}' id='xu' style="font-weight: bold; color: green; padding-right: 8px">--</span> xu
+      </a>
+      <input type="checkbox" id="_sponsor" />
+      <label for="_sponsor">Show sponsor</label>
+    </li>
+    `
   );
+
+  $("#_sponsor").change(function () {
+    showSponsor = this.checked;
+    // console.log("show sponsor", showSponsor);
+  });
 
   // Hide thongbao
   $(".navbar__link--notification").hide();
@@ -39,12 +54,26 @@ function addDonMua() {
   $(".navbar__help-center-icon").parent().hide();
 }
 
+function updateData() {
+  // console.log("update data to ", xu);
+  $("#xu").html(xu);
+}
+
 function cleanUp() {
   // remove popup at homepage
   // document.getElementsByClassName("shopee-popup__close-btn")[0]?.click();
 
   // Add donmua if not exists
   addDonMua();
+
+  updateData();
+
+  const sponsorItems = $("div[data-sqe=ad]").parent().parent().parent();
+  if (showSponsor) {
+    sponsorItems.show();
+  } else {
+    sponsorItems.hide();
+  }
 
   // Remove all products in homepage
   if (window.location.href === mainHost) {
@@ -107,9 +136,9 @@ async function checkin() {
     credentials: "include",
   });
   const data = await res2.json();
-  const xu = data.coins.available_amount;
+  xu = data.coins.available_amount;
 
-  console.log(xu);
+  // console.log(xu);
 }
 
 (function () {
@@ -118,7 +147,7 @@ async function checkin() {
   checkin();
 
   // jQuery.noConflict();
-  console.log($(".navbar__link--account"));
+  // console.log($(".navbar__link--account"));
 
   setInterval(cleanUp, 1000);
 })();
