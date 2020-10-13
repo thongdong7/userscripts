@@ -6,39 +6,60 @@
 // @author       You
 // @match        https://shopee.vn/**
 // @grant        none
+// @require      https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js
 // ==/UserScript==
 
+const mainHost = "https://shopee.vn/";
+
 function removeAll(collection) {
-    [...collection].forEach(node => node.remove());
+  [...collection].forEach((node) => node.remove());
+}
+
+function addDonMua() {
+  if ($("#donmua").length) {
+    return;
+  }
+
+  // thongbao class
+  const thongbaoACls = $("a:contains('Thông báo')").attr("class");
+  const thongbaoSpanCls = $("span:contains('Thông báo')").attr("class");
+
+  $(".navbar__link--notification").after(
+    `<li id='donmua' class="navbar__link">
+      <a class="${thongbaoACls}" href='https://shopee.vn/user/purchase/'>
+        <span class='${thongbaoSpanCls}'>Đơn mua</span>
+      </a>
+    </li>`
+  );
+
+  // Hide thongbao
+  $(".navbar__link--notification").hide();
+
+  // Hide help
+  $(".navbar__help-center-icon").parent().hide();
 }
 
 function cleanUp() {
-    // remove popup at homepage
-    document.getElementsByClassName("shopee-popup__close-btn")[0]?.click()
+  // remove popup at homepage
+  // document.getElementsByClassName("shopee-popup__close-btn")[0]?.click();
 
-    // remove game
-    removeAll(document.getElementsByClassName("shopee-floating-icons__wrapper"));
+  // Add donmua if not exists
+  addDonMua();
 
-    // Remove notification
-    const thongbao = document.getElementsByClassName("stardust-popover")[0];
-    if (thongbao.innerText === "Thông Báo") {
-        thongbao.remove();
-    }
+  // Remove all products in homepage
+  if (window.location.href === mainHost) {
+    $("[role=main]").remove();
+  }
 
-    // Create link
-    if (!document.getElementById("donmua")) {
-        const donMua = document.createElement("li");
-        donMua.setAttribute("id", "donmua");
-        donMua.innerHTML = `<a href="https://shopee.vn/user/purchase/">Đơn mua</a>`;
+  // Remove footer
+  $("footer").remove();
 
-        document.getElementsByClassName("navbar__links")[0]?.appendChild(donMua);
-    }
+  // Remove floating icon
+  $(".shopee-floating-icons__wrapper").remove();
 }
 
-(function () {
-  "use strict";
-
-  fetch("https://shopee.vn/mkt/coins/api/v2/checkin", {
+async function checkin() {
+  const res1 = await fetch("https://shopee.vn/mkt/coins/api/v2/checkin", {
     headers: {
       accept: "application/json",
       "accept-language": "en-US,en;q=0.9",
@@ -56,14 +77,48 @@ function cleanUp() {
     method: "POST",
     mode: "cors",
     credentials: "include",
-  })
-    .then((response) => response.json())
-    .then((data) => {
-      console.log("Success:", data);
-    })
-    .catch((error) => {
-      console.error("Error:", error);
-    });
+  });
+  // .then((response) => response.json())
+  // .then((data) => {
+  //   console.log("Success:", data);
+  // })
+  // .catch((error) => {
+  //   console.error("Error:", error);
+  // });
 
-    setInterval(cleanUp, 1000);
+  const res2 = await fetch("https://shopee.vn/api/v0/coins/api/summary/", {
+    headers: {
+      accept: "*/*",
+      "accept-language": "en-US,en;q=0.9",
+      // "if-none-match": "b1394fbd54410e8684e1fb243aa878d4",
+      // "if-none-match-": "55b03-79499b123dba14882162e53c464d0735",
+      "sec-fetch-dest": "empty",
+      "sec-fetch-mode": "cors",
+      "sec-fetch-site": "same-origin",
+      "x-api-source": "pc",
+      "x-requested-with": "XMLHttpRequest",
+      "x-shopee-language": "vi",
+    },
+    referrer: "https://shopee.vn/user/coin/",
+    referrerPolicy: "strict-origin-when-cross-origin",
+    body: null,
+    method: "GET",
+    mode: "cors",
+    credentials: "include",
+  });
+  const data = await res2.json();
+  const xu = data.coins.available_amount;
+
+  console.log(xu);
+}
+
+(function () {
+  "use strict";
+
+  checkin();
+
+  // jQuery.noConflict();
+  console.log($(".navbar__link--account"));
+
+  setInterval(cleanUp, 1000);
 })();
