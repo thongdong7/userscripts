@@ -7,6 +7,8 @@
 // @match        https://shopee.vn/**
 // @grant        none
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js
+// @downloadURL    https://raw.githubusercontent.com/thongdong7/userscripts/master/shopee_xu.js
+// @updateURL    https://raw.githubusercontent.com/thongdong7/userscripts/master/shopee_xu.js
 // ==/UserScript==
 
 const mainHost = "https://shopee.vn/";
