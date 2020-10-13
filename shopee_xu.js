@@ -63,6 +63,9 @@ function updateData() {
 
 function cleanUp() {
   // remove popup at homepage
+  if ($(".shopee-popup__close-btn").length) {
+    $(".shopee-popup__close-btn").click();
+  }
   // document.getElementsByClassName("shopee-popup__close-btn")[0]?.click();
 
   // Add donmua if not exists
