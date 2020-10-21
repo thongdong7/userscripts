@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name         ShopeeXu
+// @name         Shopee
 // @namespace    http://tampermonkey.net/
 // @version      0.1
 // @description  try to take over the world!
@@ -7,8 +7,8 @@
 // @match        https://shopee.vn/**
 // @grant        none
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js
-// @downloadURL    https://raw.githubusercontent.com/thongdong7/userscripts/master/shopee_xu.js
-// @updateURL    https://raw.githubusercontent.com/thongdong7/userscripts/master/shopee_xu.js
+// @downloadURL    https://raw.githubusercontent.com/thongdong7/userscripts/master/shopee.js
+// @updateURL    https://raw.githubusercontent.com/thongdong7/userscripts/master/shopee.js
 // ==/UserScript==
 
 const mainHost = "https://shopee.vn/";
@@ -30,16 +30,16 @@ function addDonMua() {
 
   $(".navbar__link--notification").after(
     `<li id='donmua' class="navbar__link">
-      <a class="${thongbaoACls}" href='https://shopee.vn/user/purchase/'>
+      <a style="color: white" href='https://shopee.vn/user/purchase/'>
         <span class='${thongbaoSpanCls}'>Đơn mua</span>
       </a>
     </li>
     <li id='info' class="navbar__link">
-      <a class="${thongbaoACls}" style="font-weight: bold">
-        <span class='${thongbaoSpanCls}' id='xu' style="font-weight: bold; color: green; padding-right: 8px">--</span> xu
+      <a href="https://shopee.vn/user/coin/">
+        <span id='xu' style="font-weight: bold; color: green; padding-right: 8px">--</span> xu
       </a>
-      <input type="checkbox" id="_sponsor" />
-      <label for="_sponsor">Show sponsor</label>
+      <input type="checkbox" id="_sponsor" style="margin-left: 16px; margin-right: 8px" />
+      <label for="_sponsor" style="cursor: pointer">Show sponsor</label>
     </li>
     `
   );
