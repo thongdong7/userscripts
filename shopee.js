@@ -2,8 +2,8 @@
 // @name         Shopee
 // @namespace    http://tampermonkey.net/
 // @version      0.2
-// @description  try to take over the world!
-// @author       You
+// @description  Hide / show shopee sponsor products, auto collection shopee coin, show current shopee coin, add shortcut links
+// @author       thongdong7
 // @match        https://shopee.vn/**
 // @grant        none
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js
