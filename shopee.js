@@ -61,7 +61,15 @@ function updateData() {
   $("#xu").html(xu);
 }
 
+const refreshMessage = "It's us, not you. Please try to refresh the page to solve the problem";
+
 function cleanUp() {
+    // auto refresh
+  if ($(`div:contains(${refreshMessage})`).length > 0) {
+      window.location.reload();
+      return;
+  }
+
   // remove popup at homepage
   if ($(".shopee-popup__close-btn").length) {
     $(".shopee-popup__close-btn").click();
@@ -150,9 +158,6 @@ async function checkin() {
   "use strict";
 
   checkin();
-
-  // jQuery.noConflict();
-  // console.log($(".navbar__link--account"));
 
   setInterval(cleanUp, 1000);
 })();
