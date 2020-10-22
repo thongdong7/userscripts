@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shopee
 // @namespace    http://tampermonkey.net/
-// @version      0.2
+// @version      0.3
 // @description  Hide / show shopee sponsor products, auto collection shopee coin, show current shopee coin, add shortcut links
 // @author       thongdong7
 // @match        https://shopee.vn/**
@@ -61,23 +61,91 @@ function updateData() {
   $("#xu").html(xu);
 }
 
-const refreshMessage = "It's us, not you. Please try to refresh the page to solve the problem";
+function changeSearchParam(params) {
+  let href = new URL(window.location.href);
+  for (const field in params) {
+    const value = params[field];
+    if (value === null || value === undefined) {
+      href.searchParams.delete(field);
+    } else {
+      href.searchParams.set(field, value);
+    }
+  }
+
+  window.location.href = href;
+}
+
+function addSearchButtons() {
+  if ($("#search_buttons").length) {
+    return;
+  }
+
+  $(".select-with-status").parent().after(
+    `
+    <style>
+    #search_buttons {
+      margin-top: auto;
+      margin-bottom: auto;
+    }
+
+    #search_buttons span {
+      color: #555;
+      cursor: pointer;
+      padding-left: 8px;
+    }
+    #search_buttons span:hover {
+      text-decoration: underline;
+      color: blue;
+    }
+
+    </style>
+    <div id="search_buttons">
+      <span id="thap_cao">Thấp đến cao</span> <span id="thap_cao_hcm">Thấp đến cao HCM</span> 
+    </div>
+    `
+  );
+
+  $("#thap_cao").click(() => {
+    changeSearchParam({
+      noCorrection: "true",
+      order: "asc",
+      page: "0",
+      sortBy: "price",
+      locations: null,
+    });
+  });
+
+  $("#thap_cao_hcm").click(() => {
+    changeSearchParam({
+      noCorrection: "true",
+      order: "asc",
+      page: "0",
+      sortBy: "price",
+      locations: "TP.%20H%E1%BB%93%20Ch%C3%AD%20Minh",
+    });
+  });
+}
+
+const refreshMessage =
+  "It's us, not you. Please try to refresh the page to solve the problem";
 
 function cleanUp() {
-    // auto refresh
+  // auto refresh
   if ($(`div:contains(${refreshMessage})`).length > 0) {
-      window.location.reload();
-      return;
+    window.location.reload();
+    return;
   }
 
   // remove popup at homepage
   if ($(".shopee-popup__close-btn").length) {
     $(".shopee-popup__close-btn").click();
   }
-  // document.getElementsByClassName("shopee-popup__close-btn")[0]?.click();
 
   // Add donmua if not exists
   addDonMua();
+
+  // Add addSearchButtons
+  addSearchButtons();
 
   updateData();
 
@@ -120,20 +188,11 @@ async function checkin() {
     mode: "cors",
     credentials: "include",
   });
-  // .then((response) => response.json())
-  // .then((data) => {
-  //   console.log("Success:", data);
-  // })
-  // .catch((error) => {
-  //   console.error("Error:", error);
-  // });
 
   const res2 = await fetch("https://shopee.vn/api/v0/coins/api/summary/", {
     headers: {
       accept: "*/*",
       "accept-language": "en-US,en;q=0.9",
-      // "if-none-match": "b1394fbd54410e8684e1fb243aa878d4",
-      // "if-none-match-": "55b03-79499b123dba14882162e53c464d0735",
       "sec-fetch-dest": "empty",
       "sec-fetch-mode": "cors",
       "sec-fetch-site": "same-origin",
