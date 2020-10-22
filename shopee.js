@@ -89,18 +89,18 @@ function addSearchButtons() {
     }
 
     #search_buttons span {
-      color: #555;
+      color: blue;
       cursor: pointer;
       padding-left: 8px;
+      text-decoration: underline;
     }
     #search_buttons span:hover {
-      text-decoration: underline;
-      color: blue;
+      text-decoration: none;
     }
 
     </style>
     <div id="search_buttons">
-      <span id="thap_cao">Thấp đến cao</span> <span id="thap_cao_hcm">Thấp đến cao HCM</span> 
+      <span id="thap_cao">Thấp trước</span> <span id="thap_cao_hcm">Thấp HCM</span> 
     </div>
     `
   );
