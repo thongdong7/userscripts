@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shopee
 // @namespace    http://tampermonkey.net/
-// @version      0.3
+// @version      0.4
 // @description  Hide / show shopee sponsor products, auto collection shopee coin, show current shopee coin, add shortcut links
 // @author       thongdong7
 // @match        https://shopee.vn/**
