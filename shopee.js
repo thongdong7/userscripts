@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Shopee
 // @namespace    http://tampermonkey.net/
-// @version      0.4
+// @version      0.5
 // @description  Hide / show shopee sponsor products, auto collection shopee coin, show current shopee coin, add shortcut links
 // @author       thongdong7
 // @match        https://shopee.vn/**
@@ -75,12 +75,8 @@ function changeSearchParam(params) {
   window.location.href = href;
 }
 
-function addSearchButtons() {
-  if ($("#search_buttons").length) {
-    return;
-  }
-
-  $(".select-with-status").parent().after(
+function createSearchShortcutForNode(node) {
+  node.after(
     `
     <style>
     #search_buttons {
@@ -100,30 +96,73 @@ function addSearchButtons() {
 
     </style>
     <div id="search_buttons">
-      <span id="thap_cao">Thấp trước</span> <span id="thap_cao_hcm">Thấp HCM</span> 
+    <span id="_prefer" title="HCM, Freeship, Cheap">Best</span> <span id="_prefer2" title="Freeship and cheap">Freeship</span> <span id="thap_cao">Thấp trước</span> <span id="thap_cao_hcm">Thấp HCM</span> 
     </div>
     `
   );
 
+  const defaultParams = {
+    locations: null,
+    order: null,
+    page: "0",
+    sortBy: null,
+    locations: null,
+    freeShipping: null,
+    labelIds: null,
+    noCorrection: "true",
+  };
+
+  $("#_prefer").click(() => {
+    changeSearchParam({
+      ...defaultParams,
+      order: "asc",
+      sortBy: "price",
+      locations: "TP.%20H%E1%BB%93%20Ch%C3%AD%20Minh",
+      freeShipping: "true",
+      labelIds: "44", // freeship extra
+    });
+  });
+
+  $("#_prefer2").click(() => {
+    changeSearchParam({
+      ...defaultParams,
+      order: "asc",
+      sortBy: "price",
+      freeShipping: "true",
+      labelIds: "44", // freeship extra
+    });
+  });
+
   $("#thap_cao").click(() => {
     changeSearchParam({
-      noCorrection: "true",
+      ...defaultParams,
       order: "asc",
-      page: "0",
       sortBy: "price",
-      locations: null,
     });
   });
 
   $("#thap_cao_hcm").click(() => {
     changeSearchParam({
-      noCorrection: "true",
+      ...defaultParams,
       order: "asc",
-      page: "0",
       sortBy: "price",
       locations: "TP.%20H%E1%BB%93%20Ch%C3%AD%20Minh",
     });
   });
+}
+
+function addSearchButtons() {
+  if ($("#search_buttons").length) {
+    return;
+  }
+
+  if (!$(".shopee-search-empty-result-section__hint").length) {
+    createSearchShortcutForNode($(".select-with-status").parent());
+  } else {
+    createSearchShortcutForNode(
+      $(".shopee-search-empty-result-section__button")
+    );
+  }
 }
 
 const refreshMessage =
