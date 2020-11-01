@@ -72,7 +72,7 @@ function changeSearchParam(params) {
     }
   }
 
-  window.location.href = href.toString().replace("+", "%20");
+  window.location.href = href.toString().replaceAll("+", "%20");
 }
 
 function createSearchShortcutForNode(node) {
